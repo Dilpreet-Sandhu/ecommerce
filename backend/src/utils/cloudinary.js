@@ -29,3 +29,21 @@ export const uploadOnCloudinary = async (filepath) => {
     }
 
 }
+
+export const deleteFromCloudinary = async (url) => {
+
+    try {
+
+        const slashArr = url.split('/');
+        const lastElement = slashArr.at(-1);
+        const dotArr = lastElement.split('.');
+        const publicId = dotArr[0];
+
+        const result = await cloudinary.uploader.destroy(publicId);
+
+        return result;
+    } catch (error) {
+        
+    }
+
+}
