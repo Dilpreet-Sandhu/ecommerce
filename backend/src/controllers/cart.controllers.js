@@ -110,5 +110,22 @@ export const removeFromCart = asyncHandler(async (req,res) => {
 })
 
 export const viewCart = asyncHandler(async (req,res) => {
-    
+
+    const userId = req.user?._id;
+
+    const cart = await Cart.find({userId}).populate("items.productId","title image price category")
+
+    if (!cart) {
+        throw new ApiError(400,"no cart found")
+    }
+
+
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200,cart,"cart fetched successfully")
+    )
+
+
+
 })
