@@ -129,3 +129,26 @@ export const viewCart = asyncHandler(async (req,res) => {
 
 
 })
+
+export const clearWholeCart = asyncHandler(async (req,res) => {
+    
+    const userId = req.user?._id;
+
+    const cart = await Cart.findOne({userId});
+
+    if (!cart) {
+        throw new ApiError(400,"no cart found")
+    }
+
+    if (cart.items.length > 0) {
+        cart.items = [];
+    }
+
+    await cart.save({validateBeforeSave : false});
+
+
+    res
+    .status(200)
+    .json({cart})
+
+})
