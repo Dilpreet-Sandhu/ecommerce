@@ -29,12 +29,19 @@ const cartSchema = new Schema({
         },
         productCount : {
             type : Number,
-            required : true,
             default : 1
         }
     }],
     totalPrice : {
         type : Number,
+        required : true
+    },
+    taxPercentage : {
+        type : Number
+    }
+    ,
+    shippingPrice : {
+        type : Number
     }
 },{timestamps : true});
 

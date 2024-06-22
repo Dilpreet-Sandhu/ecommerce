@@ -18,15 +18,15 @@ export const addToCart = asyncHandler(async (req,res) => {
 
     const {productId} = req.params;
 
-
-
-    try {
         let cart = await Cart.findOne({userId});
 
         if (!cart) {
             cart = await Cart.create({
                 userId,
-                items : []
+                items : [],
+                totalPrice : 0,
+                taxPercentage : 5,
+                shippingPrice : 0
             })
         };
 
@@ -34,6 +34,7 @@ export const addToCart = asyncHandler(async (req,res) => {
 
         if (productIdx > -1) {
             cart.items[productIdx].productCount += 1;
+            console.log(cart.totalPrice)
         }
         else {
 
@@ -44,6 +45,8 @@ export const addToCart = asyncHandler(async (req,res) => {
             }
 
             cart.items.push({productId,productCount : 1})
+            cart.totalPrice = product?.price;
+            cart.shippingPrice = Math.round(product?.price * 10/100)
         }
 
         await cart.save({validateBeforeSave : false});
@@ -54,9 +57,7 @@ export const addToCart = asyncHandler(async (req,res) => {
             new ApiResponse(200,cart,"product added successfully")
         )
         
-    } catch (error) {
-        console.log("something went wrong" + error)
-    }
+    
 
 
 
